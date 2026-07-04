@@ -80,8 +80,40 @@ button:hover{
     </form>
 </div>
 <script type="module">
+  // นำเข้า Firebase
   import app from './firebase.js';
-  console.log("✅ Firebase เชื่อมต่อสำเร็จ!", app);
+  import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+  const auth = getAuth(app);
+
+  // เลือก element ในแบบฟอร์ม
+  const emailInput = document.querySelector('input[type="email"]');
+  const passwordInput = document.querySelector('input[type="password"]');
+  const loginForm = document.querySelector('form');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // ป้องกันการรีโหลดหน้า
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+      alert("กรุณากรอกอีเมลและรหัสผ่าน");
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("เข้าสู่ระบบสำเร็จ!", userCredential.user);
+      
+      alert("ยินดีต้อนรับ! 🎉");
+      window.location.href = "index.html"; // ไปหน้าหลัก
+
+    } catch (error) {
+      console.error(error);
+      alert("เข้าสู่ระบบไม่สำเร็จ: " + error.message);
+    }
+  });
 </script>
 </body>
 </html>
