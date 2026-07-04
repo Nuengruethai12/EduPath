@@ -1,143 +1,275 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduPath - Home</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-    body {
-      background: linear-gradient(135deg, #f4f8ff, #e0f0ff);
-      min-height: 100vh;
-    }
-    .navbar {
-      background: #1e40af;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .welcome {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    .card h3 { color: #1e40af; margin: 15px 0; }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #1e40af;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    button:hover { background: #2a5bc8; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduPath Register</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.register-box{
+    background:white;
+    padding:40px;
+    width:360px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+h1{
+    color:#1e40af;
+    margin-bottom:10px;
+}
+
+p{
+    color:#666;
+    margin-bottom:20px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:15px;
+}
+
+.password-box{
+    position:relative;
+}
+
+.password-box button{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    color:#1e40af;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.register-btn{
+    width:100%;
+    padding:12px;
+    background:#1e40af;
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.register-btn:hover{
+    opacity:.9;
+}
+
+.register-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+#error-message{
+    color:red;
+    font-size:14px;
+    margin-top:10px;
+}
+
+a{
+    color:#1e40af;
+    text-decoration:none;
+}
+
+a:hover{
+    text-decoration:underline;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="navbar">
-    <h2>🎓 EduPath</h2>
-    <div>
-      <span id="user-email">Loading...</span> | 
-      <a href="login.html" style="color:white; margin-left:15px;">Logout</a>
-    </div>
-  </div>
+<div class="register-box">
 
-  <div class="container">
-    <div class="welcome">
-      <h1>ยินดีต้อนรับกลับมา! 👋</h1>
-      <p>พร้อมเรียนรู้และวางแผนอนาคตของคุณแล้วหรือยัง?</p>
-    </div>
+    <h1>🎓 EduPath</h1>
+    <p>Create your account</p>
 
-    <div class="card-grid">
-      <!-- Card 1 -->
-      <div class="card">
-        <h3>📝 จดโน้ต</h3>
-        <p>บันทึกความรู้ จัดหมวดหมู่ และค้นหาโน้ตได้ง่าย</p>
-        <button onclick="goToNotes()">ไปที่โน้ตของฉัน</button>
-      </div>
+    <form id="register-form">
 
-      <!-- Card 2 -->
-      <div class="card">
-        <h3>🔎 ค้นหาข้อมูลการศึกษา</h3>
-        <p>ค้นหาคณะ มหาวิทยาลัย และเส้นทางเรียนต่อ</p>
-        <button onclick="goToSearch()">ค้นหาตอนนี้</button>
-      </div>
+        <input
+            type="email"
+            id="email"
+            placeholder="Email"
+            autocomplete="email"
+            required>
 
-      <!-- Card 3 -->
-      <div class="card">
-        <h3>🤖 AI Advisor</h3>
-        <p>ผู้ช่วย AI แนะนำคณะและเส้นทางเรียนที่เหมาะกับคุณ</p>
-        <button onclick="goToAI()">เริ่มปรึกษา AI</button>
-      </div>
+        <div class="password-box">
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                autocomplete="new-password"
+                required>
 
-      <!-- Card 4 -->
-      <div class="card">
-        <h3>🛒 Marketplace</h3>
-        <p>ซื้อ-ขายโน้ตและคอร์สเรียนจากผู้สอนจริง</p>
-        <button onclick="goToMarket()">เข้าสู่ Marketplace</button>
-      </div>
-    </div>
-  </div>
+            <button type="button" id="togglePass1">
+                Show
+            </button>
+        </div>
 
-  <script type="module">
-  import app from './firebase.js';
-  import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+        <div class="password-box">
+            <input
+                type="password"
+                id="confirm-password"
+                placeholder="Confirm Password"
+                autocomplete="new-password"
+                required>
 
-  const auth = getAuth(app);
-  const form = document.getElementById('register-form');
+            <button type="button" id="togglePass2">
+                Show
+            </button>
+        </div>
 
-  form.addEventListener('submit', async (e) => {
+        <button class="register-btn" id="registerBtn" type="submit">
+            Register
+        </button>
+
+        <div id="error-message"></div>
+
+    </form>
+
+    <p style="margin-top:20px;">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+
+</div>
+
+<script type="module">
+
+import app from "./firebase.js";
+
+import {
+    getAuth,
+    createUserWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const auth = getAuth(app);
+
+const form = document.getElementById("register-form");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirm-password");
+
+const registerBtn = document.getElementById("registerBtn");
+const errorMessage = document.getElementById("error-message");
+
+const togglePass1 = document.getElementById("togglePass1");
+const togglePass2 = document.getElementById("togglePass2");
+
+// แสดง/ซ่อน Password
+togglePass1.onclick = () => {
+    if(password.type==="password"){
+        password.type="text";
+        togglePass1.textContent="Hide";
+    }else{
+        password.type="password";
+        togglePass1.textContent="Show";
+    }
+};
+
+togglePass2.onclick = () => {
+    if(confirmPassword.type==="password"){
+        confirmPassword.type="text";
+        togglePass2.textContent="Hide";
+    }else{
+        confirmPassword.type="password";
+        togglePass2.textContent="Show";
+    }
+};
+
+// สมัครสมาชิก
+form.addEventListener("submit", async(e)=>{
+
     e.preventDefault();
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const confirm = document.getElementById('confirm-password').value.trim();
+    errorMessage.textContent="";
 
-    if (password !== confirm) {
-      return alert("รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน!");
-    }
-    if (password.length < 6) {
-      return alert("รหัสผ่านต้องยาวอย่างน้อย 6 ตัวอักษร");
+    const userEmail=email.value.trim();
+
+    // ไม่ใช้ trim กับ password
+    const userPassword=password.value;
+    const confirm=confirmPassword.value;
+
+    if(userPassword!==confirm){
+        errorMessage.textContent="รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
+        return;
     }
 
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      
-      alert("สมัครสมาชิกสำเร็จ! 🎉\nกรุณาเข้าสู่ระบบด้วยอีเมลและรหัสผ่านที่สมัคร");
-      
-      // เด้งไปหน้า Login (แก้ตรงนี้)
-      window.location.href = "login.html";
-      
-    } catch (error) {
-      alert("สมัครไม่สำเร็จ: " + error.message);
+    if(userPassword.length<6){
+        errorMessage.textContent="รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+        return;
     }
-  });
+
+    registerBtn.disabled=true;
+    registerBtn.textContent="Creating account...";
+
+    try{
+
+        await createUserWithEmailAndPassword(
+            auth,
+            userEmail,
+            userPassword
+        );
+
+        alert("สมัครสมาชิกสำเร็จ 🎉");
+
+        window.location.href="login.html";
+
+    }catch(error){
+
+        switch(error.code){
+
+            case "auth/email-already-in-use":
+                errorMessage.textContent="อีเมลนี้ถูกใช้งานแล้ว";
+                break;
+
+            case "auth/invalid-email":
+                errorMessage.textContent="รูปแบบอีเมลไม่ถูกต้อง";
+                break;
+
+            case "auth/weak-password":
+                errorMessage.textContent="รหัสผ่านไม่ปลอดภัย";
+                break;
+
+            default:
+                errorMessage.textContent=error.message;
+
+        }
+
+        registerBtn.disabled=false;
+        registerBtn.textContent="Register";
+
+    }
+
+});
+
 </script>
+
 </body>
 </html>
