@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPath - Home</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+    body {
+      background: linear-gradient(135deg, #f4f8ff, #e0f0ff);
+      min-height: 100vh;
+    }
+    .navbar {
+      background: #1e40af;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .welcome {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .card h3 { color: #1e40af; margin: 15px 0; }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    button:hover { background: #2a5bc8; }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>🎓 EduPath</h2>
+    <div>
+      <span id="user-email">Loading...</span> | 
+      <a href="login.html" style="color:white; margin-left:15px;">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="welcome">
+      <h1>ยินดีต้อนรับกลับมา! 👋</h1>
+      <p>พร้อมเรียนรู้และวางแผนอนาคตของคุณแล้วหรือยัง?</p>
+    </div>
+
+    <div class="card-grid">
+      <!-- Card 1 -->
+      <div class="card">
+        <h3>📝 จดโน้ต</h3>
+        <p>บันทึกความรู้ จัดหมวดหมู่ และค้นหาโน้ตได้ง่าย</p>
+        <button onclick="goToNotes()">ไปที่โน้ตของฉัน</button>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card">
+        <h3>🔎 ค้นหาข้อมูลการศึกษา</h3>
+        <p>ค้นหาคณะ มหาวิทยาลัย และเส้นทางเรียนต่อ</p>
+        <button onclick="goToSearch()">ค้นหาตอนนี้</button>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card">
+        <h3>🤖 AI Advisor</h3>
+        <p>ผู้ช่วย AI แนะนำคณะและเส้นทางเรียนที่เหมาะกับคุณ</p>
+        <button onclick="goToAI()">เริ่มปรึกษา AI</button>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card">
+        <h3>🛒 Marketplace</h3>
+        <p>ซื้อ-ขายโน้ตและคอร์สเรียนจากผู้สอนจริง</p>
+        <button onclick="goToMarket()">เข้าสู่ Marketplace</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import app from './firebase.js';
+    import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+
+    const auth = getAuth(app);
+
+    // ตรวจสอบว่าล็อกอินหรือยัง
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('user-email').textContent = user.email;
+      } else {
+        window.location.href = "login.html"; // ถ้ายังไม่ได้ล็อกอิน ให้กลับไปหน้า Login
+      }
+    });
+
+    // ฟังก์ชันตัวอย่าง (ยังเป็นหน้าเปล่า)
+    function goToNotes() { alert("กำลังพัฒนาหน้าโน้ต..."); }
+    function goToSearch() { alert("กำลังพัฒนาหน้าค้นหา..."); }
+    function goToAI() { alert("กำลังพัฒนา AI Advisor..."); }
+    function goToMarket() { alert("กำลังพัฒนา Marketplace..."); }
+  </script>
+</body>
+</html>
