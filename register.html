@@ -166,7 +166,8 @@ import app from "./firebase.js";
 
 import {
     getAuth,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const auth = getAuth(app);
@@ -231,22 +232,19 @@ form.addEventListener("submit", async(e)=>{
 
     try{
 
-     import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-await createUserWithEmailAndPassword(
-    auth,
-    userEmail,
-    userPassword
-);
+        await createUserWithEmailAndPassword(
+            auth,
+            userEmail,
+            userPassword
+        );
 
-await signOut(auth);
+        // ออกจากระบบทันทีหลังสมัครสำเร็จ
+        await signOut(auth);
 
-alert("สมัครสมาชิกสำเร็จ 🎉");
+        alert("สมัครสมาชิกสำเร็จ 🎉");
 
-window.location.href = "login.html";
+        window.location.href="login.html";
+
     }catch(error){
 
         switch(error.code){
