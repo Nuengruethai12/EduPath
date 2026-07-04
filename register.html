@@ -241,9 +241,12 @@ form.addEventListener("submit", async(e)=>{
         // ออกจากระบบทันทีหลังสมัครสำเร็จ
         await signOut(auth);
 
-        alert("สมัครสมาชิกสำเร็จ 🎉");
+       registerBtn.disabled = false;
+registerBtn.textContent = "Register";
 
-        window.location.href="login.html";
+alert("สมัครสมาชิกสำเร็จ 🎉");
+
+window.location.href = "login.html";
 
     }catch(error){
 
