@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - EduPath</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+    .register-box { max-width: 400px; margin: 0 auto; }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { width: 100%; padding: 12px; background: #4285f4; color: white; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="register-box">
+    <h1>สมัครสมาชิก EduPath</h1>
+    <p>สร้างบัญชีใหม่</p>
+
+    <form id="register-form">
+      <input type="email" id="email" placeholder="อีเมล" required>
+      <input type="password" id="password" placeholder="รหัสผ่าน" required>
+      <button type="submit">สมัครสมาชิก</button>
+    </form>
+
+    <p>มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบ</a></p>
+  </div>
+
+  <script type="module">
+    import app from './firebase.js';
+    import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+    const auth = getAuth(app);
+    const registerForm = document.getElementById('register-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("สมัครสมาชิกสำเร็จ! 🎉");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("สมัครไม่สำเร็จ: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
