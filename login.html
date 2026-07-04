@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +12,6 @@
     box-sizing:border-box;
     font-family:Arial,sans-serif;
 }
-
 body{
     background:#f4f8ff;
     display:flex;
@@ -20,7 +19,7 @@ body{
     align-items:center;
     height:100vh;
 }
-  .login-box{
+.login-box{
     background:white;
     padding:40px;
     width:350px;
@@ -28,17 +27,14 @@ body{
     box-shadow:0 0 20px rgba(0,0,0,0.1);
     text-align:center;
 }
-
 h1{
     color:#1e40af;
     margin-bottom:10px;
 }
-
 p{
     color:#666;
     margin-bottom:25px;
 }
-
 input{
     width:100%;
     padding:12px;
@@ -46,7 +42,6 @@ input{
     border:1px solid #ddd;
     border-radius:8px;
 }
-
 button{
     width:100%;
     padding:12px;
@@ -57,7 +52,6 @@ button{
     font-size:16px;
     cursor:pointer;
 }
-
 button:hover{
     opacity:0.9;
 }
@@ -71,40 +65,28 @@ button:hover{
     <p>Login to your account</p>
 
    <form id="login-form">
-  <input type="email" id="email" placeholder="Email" required>
-  <input type="password" id="password" placeholder="Password" required>
-  
-  <button type="submit">Login</button>
-</form>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+   </form>
 
-<!-- ลิงก์เพิ่มเติม -->
-<p>
-  <a href="forgot-password.html">Forgot Password?</a>
-</p>
-<p>
-Don't have an account? <a href="register.html">Register</a>
-</p>
+   <!-- ลิงก์เพิ่มเติม -->
+   <p><a href="forgot-password.html">Forgot Password?</a></p>
+   <p>Don't have an account? <a href="register.html">Register</a></p>
+</div>
 
 <script type="module">
   import app from './firebase.js';
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    sendPasswordResetEmail 
-  } from "firebase/auth";
+  import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
   const auth = getAuth(app);
-
   const loginForm = document.getElementById('login-form');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
-  const forgotLink = document.getElementById('forgot-password');
-  const registerLink = document.getElementById('register-link');
 
-  // === Login ===
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+
     const email = emailInput.value.trim();
     const password = passwordInput.value.trim();
 
@@ -116,41 +98,6 @@ Don't have an account? <a href="register.html">Register</a>
       alert("ล็อกอินไม่สำเร็จ: " + error.message);
     }
   });
-
-  // === Register ===
-  registerLink.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-
-    if (!email || !password) {
-      alert("กรุณากรอกอีเมลและรหัสผ่าน");
-      return;
-    }
-
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert("สมัครสมาชิกสำเร็จ! กรุณาล็อกอิน");
-    } catch (error) {
-      alert("สมัครไม่สำเร็จ: " + error.message);
-    }
-  });
-
-  // === Forgot Password ===
-  forgotLink.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    if (!email) {
-      alert("กรุณากรอกอีเมลก่อน");
-      return;
-    }
-
-    try {
-      await sendPasswordResetEmail(auth, email);
-      alert("ส่งลิงก์รีเซ็ตรหัสผ่านไปที่อีเมลแล้ว กรุณาตรวจสอบกล่องจดหมาย");
-    } catch (error) {
-      alert("เกิดข้อผิดพลาด: " + error.message);
-    }
-  });
 </script>
 </body>
 </html>
-
