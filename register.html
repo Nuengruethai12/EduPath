@@ -231,16 +231,22 @@ form.addEventListener("submit", async(e)=>{
 
     try{
 
-        await createUserWithEmailAndPassword(
-            auth,
-            userEmail,
-            userPassword
-        );
+     import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+await createUserWithEmailAndPassword(
+    auth,
+    userEmail,
+    userPassword
+);
 
-        alert("สมัครสมาชิกสำเร็จ 🎉");
+await signOut(auth);
 
-        window.location.href="login.html";
+alert("สมัครสมาชิกสำเร็จ 🎉");
 
+window.location.href = "login.html";
     }catch(error){
 
         switch(error.code){
