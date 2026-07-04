@@ -5,10 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Register - EduPath</title>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-    .register-box { max-width: 400px; margin: 0 auto; }
-    input { width: 100%; padding: 10px; margin: 10px 0; }
-    button { width: 100%; padding: 12px; background: #4285f4; color: white; border: none; cursor: pointer; }
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 50px; 
+      background: #f4f4f4;
+    }
+    .register-box { 
+      max-width: 400px; 
+      margin: 0 auto; 
+      background: white; 
+      padding: 30px; 
+      border-radius: 10px; 
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input { 
+      width: 100%; 
+      padding: 12px; 
+      margin: 8px 0; 
+      border: 1px solid #ddd; 
+      border-radius: 5px; 
+    }
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      background: #4285f4; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 16px;
+    }
+    button:hover { background: #3367d6; }
   </style>
 </head>
 <body>
@@ -19,6 +47,8 @@
     <form id="register-form">
       <input type="email" id="email" placeholder="อีเมล" required>
       <input type="password" id="password" placeholder="รหัสผ่าน" required>
+      <input type="password" id="confirm-password" placeholder="ยืนยันรหัสผ่าน" required>
+      
       <button type="submit">สมัครสมาชิก</button>
     </form>
 
@@ -33,12 +63,25 @@
     const registerForm = document.getElementById('register-form');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
 
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
+      const confirmPassword = confirmPasswordInput.value.trim();
+
+      // ตรวจสอบว่ารหัสผ่านตรงกันไหม
+      if (password !== confirmPassword) {
+        alert("รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน!");
+        return;
+      }
+
+      if (password.length < 6) {
+        alert("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร");
+        return;
+      }
 
       try {
         await createUserWithEmailAndPassword(auth, email, password);
