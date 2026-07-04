@@ -93,8 +93,12 @@ button:hover{
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("เข้าสู่ระบบสำเร็จ! 🎉");
+      
+      // เด้งไปหน้า Home
       window.location.href = "index.html";
+      
     } catch (error) {
+      console.error(error);
       alert("ล็อกอินไม่สำเร็จ: " + error.message);
     }
   });
