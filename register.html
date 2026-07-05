@@ -107,56 +107,60 @@ a:hover{
 
 <div class="register-box">
 
-    <h1>🎓 EduPath</h1>
-    <p>Create your account</p>
+<h1>🎓 EduPath</h1>
+<p>Create your account</p>
 
-    <form id="register-form">
+<form id="register-form">
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            autocomplete="email"
-            required>
+<input
+type="email"
+id="email"
+placeholder="Email"
+autocomplete="email"
+required>
 
-        <div class="password-box">
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                autocomplete="new-password"
-                required>
+<div class="password-box">
 
-            <button type="button" id="togglePass1">
-                Show
-            </button>
-        </div>
+<input
+type="password"
+id="password"
+placeholder="Password"
+autocomplete="new-password"
+required>
 
-        <div class="password-box">
-            <input
-                type="password"
-                id="confirm-password"
-                placeholder="Confirm Password"
-                autocomplete="new-password"
-                required>
+<button type="button" id="togglePass1">
+Show
+</button>
 
-            <button type="button" id="togglePass2">
-                Show
-            </button>
-        </div>
+</div>
 
-        <button class="register-btn" id="registerBtn" type="submit">
-            Register
-        </button>
+<div class="password-box">
 
-        <div id="error-message"></div>
+<input
+type="password"
+id="confirm-password"
+placeholder="Confirm Password"
+autocomplete="new-password"
+required>
 
-    </form>
+<button type="button" id="togglePass2">
+Show
+</button>
 
-    <p style="margin-top:20px;">
-        Already have an account?
-        <a href="login.html">Login</a>
-    </p>
+</div>
+
+<button class="register-btn" id="registerBtn" type="submit">
+Register
+</button>
+
+<div id="error-message"></div>
+
+</form>
+
+<p style="margin-top:20px;">
+Already have an account?
+<a href="login.html">Login</a>
+</p>
 
 </div>
 
@@ -167,8 +171,7 @@ import app from "./firebase.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
-    sendEmailVerification,
-    signOut
+    sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const auth = getAuth(app);
@@ -184,54 +187,54 @@ const errorMessage = document.getElementById("error-message");
 const togglePass1 = document.getElementById("togglePass1");
 const togglePass2 = document.getElementById("togglePass2");
 
-// แสดง/ซ่อน Password
-togglePass1.onclick = () => {
-    if(password.type==="password"){
-        password.type="text";
-        togglePass1.textContent="Hide";
-    }else{
-        password.type="password";
-        togglePass1.textContent="Show";
-    }
+togglePass1.onclick=()=>{
+
+if(password.type==="password"){
+password.type="text";
+togglePass1.textContent="Hide";
+}else{
+password.type="password";
+togglePass1.textContent="Show";
+}
+
 };
 
-togglePass2.onclick = () => {
-    if(confirmPassword.type==="password"){
-        confirmPassword.type="text";
-        togglePass2.textContent="Hide";
-    }else{
-        confirmPassword.type="password";
-        togglePass2.textContent="Show";
-    }
+togglePass2.onclick=()=>{
+
+if(confirmPassword.type==="password"){
+confirmPassword.type="text";
+togglePass2.textContent="Hide";
+}else{
+confirmPassword.type="password";
+togglePass2.textContent="Show";
+}
+
 };
 
-// สมัครสมาชิก
-form.addEventListener("submit", async(e)=>{
+form.addEventListener("submit",async(e)=>{
 
-    e.preventDefault();
+e.preventDefault();
 
-    errorMessage.textContent="";
+errorMessage.textContent="";
 
-    const userEmail = email.value.trim();
-    const userPassword = password.value;
-    const confirm = confirmPassword.value;
+const userEmail=email.value.trim();
+const userPassword=password.value;
+const confirm=confirmPassword.value;
 
-    if(userPassword !== confirm){
-        errorMessage.textContent = "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
-        return;
-    }
+if(userPassword!==confirm){
+errorMessage.textContent="รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
+return;
+}
 
-    if(userPassword.length < 6){
-        errorMessage.textContent = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-        return;
-    }
+if(userPassword.length<6){
+errorMessage.textContent="รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+return;
+}
 
-    registerBtn.disabled = true;
-    registerBtn.textContent = "Creating account...";
+registerBtn.disabled=true;
+registerBtn.textContent="Creating account...";
 
-    try{
-
-        const userCredential = await createUserWithEmailAndPassword(
+try{        const userCredential = await createUserWithEmailAndPassword(
             auth,
             userEmail,
             userPassword
@@ -240,39 +243,35 @@ form.addEventListener("submit", async(e)=>{
         // ส่งอีเมลยืนยัน
         await sendEmailVerification(userCredential.user);
 
-        // ออกจากระบบทันที
-        await signOut(auth);
-
         registerBtn.disabled = false;
         registerBtn.textContent = "Register";
 
-        alert("สมัครสมาชิกสำเร็จ 🎉\n\nกรุณาตรวจสอบอีเมลและกดลิงก์ยืนยันก่อนเข้าสู่ระบบ");
-
-      window.location.href = "verify-email.html";
+        // ไปหน้าตรวจสอบอีเมล
+        window.location.href = "verify-email.html";
 
     }catch(error){
 
         switch(error.code){
 
             case "auth/email-already-in-use":
-                errorMessage.textContent = "อีเมลนี้ถูกใช้งานแล้ว";
+                errorMessage.textContent="อีเมลนี้ถูกใช้งานแล้ว";
                 break;
 
             case "auth/invalid-email":
-                errorMessage.textContent = "รูปแบบอีเมลไม่ถูกต้อง";
+                errorMessage.textContent="รูปแบบอีเมลไม่ถูกต้อง";
                 break;
 
             case "auth/weak-password":
-                errorMessage.textContent = "รหัสผ่านไม่ปลอดภัย";
+                errorMessage.textContent="รหัสผ่านไม่ปลอดภัย";
                 break;
 
             default:
-                errorMessage.textContent = error.message;
+                errorMessage.textContent=error.message;
 
         }
 
-        registerBtn.disabled = false;
-        registerBtn.textContent = "Register";
+        registerBtn.disabled=false;
+        registerBtn.textContent="Register";
 
     }
 
