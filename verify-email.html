@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Email - EduPath</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f8ff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.box{
+    background:white;
+    width:380px;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 0 20px rgba(0,0,0,.1);
+}
+
+h1{
+    color:#1e40af;
+    margin-bottom:15px;
+}
+
+p{
+    color:#666;
+    margin:12px 0;
+    line-height:1.5;
+}
+
+.email{
+    color:#1e40af;
+    font-weight:bold;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.verify-btn{
+    background:#1e40af;
+    color:white;
+}
+
+.resend-btn{
+    background:#10b981;
+    color:white;
+}
+
+.login-btn{
+    background:#888;
+    color:white;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+#status{
+    margin-top:15px;
+    color:red;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>🎓 EduPath</h1>
+
+<p>สมัครสมาชิกสำเร็จ 🎉</p>
+
+<p>เราได้ส่งอีเมลยืนยันไปที่</p>
+
+<p class="email" id="email">Loading...</p>
+
+<p>กรุณากดลิงก์ในอีเมลก่อนใช้งานระบบ</p>
+
+<button class="verify-btn" id="verifyBtn">
+ฉันยืนยันอีเมลแล้ว
+</button>
+
+<button class="resend-btn" id="resendBtn">
+ส่งอีเมลอีกครั้ง
+</button>
+
+<button class="login-btn"
+onclick="window.location.href='login.html'">
+กลับหน้า Login
+</button>
+
+<div id="status"></div>
+
+</div>
+
+<script type="module">
+
+import app from "./firebase.js";
+
+import {
+    getAuth,
+    sendEmailVerification
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const auth = getAuth(app);
+
+const user = auth.currentUser;
+
+const emailText = document.getElementById("email");
+const status = document.getElementById("status");
+
+if(!user){
+    window.location.href="login.html";
+}
+
+emailText.textContent = user.email;
+
+
+// ตรวจสอบการยืนยันอีเมล
+document.getElementById("verifyBtn").onclick = async ()=>{
+
+    await user.reload();
+
+    if(user.emailVerified){
+
+        alert("ยืนยันอีเมลสำเร็จ 🎉");
+
+        window.location.href="home.html";
+
+    }else{
+
+        status.textContent="ยังไม่ได้ยืนยันอีเมล กรุณาตรวจสอบ Inbox";
+
+    }
+
+};
+
+
+// ส่งอีเมลใหม่
+document.getElementById("resendBtn").onclick = async ()=>{
+
+    await sendEmailVerification(user);
+
+    alert("ส่งอีเมลยืนยันอีกครั้งเรียบร้อย");
+
+};
+
+</script>
+
+</body>
+</html>
