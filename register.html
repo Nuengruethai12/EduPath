@@ -171,7 +171,8 @@ import app from "./firebase.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
-    sendEmailVerification
+    sendEmailVerification,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const auth = getAuth(app);
@@ -187,54 +188,54 @@ const errorMessage = document.getElementById("error-message");
 const togglePass1 = document.getElementById("togglePass1");
 const togglePass2 = document.getElementById("togglePass2");
 
-togglePass1.onclick=()=>{
+togglePass1.onclick = () => {
 
-if(password.type==="password"){
-password.type="text";
-togglePass1.textContent="Hide";
-}else{
-password.type="password";
-togglePass1.textContent="Show";
-}
-
-};
-
-togglePass2.onclick=()=>{
-
-if(confirmPassword.type==="password"){
-confirmPassword.type="text";
-togglePass2.textContent="Hide";
-}else{
-confirmPassword.type="password";
-togglePass2.textContent="Show";
-}
+    if(password.type === "password"){
+        password.type = "text";
+        togglePass1.textContent = "Hide";
+    }else{
+        password.type = "password";
+        togglePass1.textContent = "Show";
+    }
 
 };
 
-form.addEventListener("submit",async(e)=>{
+togglePass2.onclick = () => {
 
-e.preventDefault();
+    if(confirmPassword.type === "password"){
+        confirmPassword.type = "text";
+        togglePass2.textContent = "Hide";
+    }else{
+        confirmPassword.type = "password";
+        togglePass2.textContent = "Show";
+    }
 
-errorMessage.textContent="";
+};
 
-const userEmail=email.value.trim();
-const userPassword=password.value;
-const confirm=confirmPassword.value;
+form.addEventListener("submit", async(e)=>{
 
-if(userPassword!==confirm){
-errorMessage.textContent="รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
-return;
-}
+    e.preventDefault();
 
-if(userPassword.length<6){
-errorMessage.textContent="รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
-return;
-}
+    errorMessage.textContent = "";
 
-registerBtn.disabled=true;
-registerBtn.textContent="Creating account...";
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
+    const confirm = confirmPassword.value;
 
-try{        const userCredential = await createUserWithEmailAndPassword(
+    if(userPassword !== confirm){
+        errorMessage.textContent = "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
+        return;
+    }
+
+    if(userPassword.length < 6){
+        errorMessage.textContent = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+        return;
+    }
+
+    registerBtn.disabled = true;
+    registerBtn.textContent = "Creating account...";
+
+    try{        const userCredential = await createUserWithEmailAndPassword(
             auth,
             userEmail,
             userPassword
@@ -243,35 +244,40 @@ try{        const userCredential = await createUserWithEmailAndPassword(
         // ส่งอีเมลยืนยัน
         await sendEmailVerification(userCredential.user);
 
+        // ออกจากระบบ
+        await signOut(auth);
+
         registerBtn.disabled = false;
         registerBtn.textContent = "Register";
 
-        // ไปหน้าตรวจสอบอีเมล
-        window.location.href = "verify-email.html";
+        // ไปหน้าตรวจสอบอีเมล พร้อมส่งอีเมลไปแสดง
+        window.location.href =
+            "verify-email.html?email=" +
+            encodeURIComponent(userEmail);
 
     }catch(error){
 
         switch(error.code){
 
             case "auth/email-already-in-use":
-                errorMessage.textContent="อีเมลนี้ถูกใช้งานแล้ว";
+                errorMessage.textContent = "อีเมลนี้ถูกใช้งานแล้ว";
                 break;
 
             case "auth/invalid-email":
-                errorMessage.textContent="รูปแบบอีเมลไม่ถูกต้อง";
+                errorMessage.textContent = "รูปแบบอีเมลไม่ถูกต้อง";
                 break;
 
             case "auth/weak-password":
-                errorMessage.textContent="รหัสผ่านไม่ปลอดภัย";
+                errorMessage.textContent = "รหัสผ่านไม่ปลอดภัย";
                 break;
 
             default:
-                errorMessage.textContent=error.message;
+                errorMessage.textContent = error.message;
 
         }
 
-        registerBtn.disabled=false;
-        registerBtn.textContent="Register";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Register";
 
     }
 
