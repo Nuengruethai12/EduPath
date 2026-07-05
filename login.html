@@ -237,8 +237,12 @@ if(!user.emailVerified){
 
     await signOut(auth);
 
-    errorMessage.textContent =
-        "กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ";
+    errorMessage.innerHTML = `
+        กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ<br><br>
+        <a href="verify-email.html">
+            ไปหน้ายืนยันอีเมล
+        </a>
+    `;
 
     loginBtn.disabled = false;
     loginBtn.textContent = "Login";
@@ -246,12 +250,12 @@ if(!user.emailVerified){
     return;
 }
 
+loginBtn.disabled = false;
 loginBtn.textContent = "Success ✓";
 
 setTimeout(()=>{
-    window.location.href="home.html";
+    window.location.href = "home.html";
 },500);
-
     }catch(error){
 
         switch(error.code){
