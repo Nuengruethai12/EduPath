@@ -162,11 +162,10 @@ a:hover{
 
 <script type="module">
 
-import app from "./firebase.js";
-
 import {
     getAuth,
     createUserWithEmailAndPassword,
+    sendEmailVerification,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -232,22 +231,24 @@ form.addEventListener("submit", async(e)=>{
 
     try{
 
-        await createUserWithEmailAndPassword(
-            auth,
-            userEmail,
-            userPassword
-        );
+     const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    userEmail,
+    userPassword
+);
 
-        // ออกจากระบบทันทีหลังสมัครสำเร็จ
-        await signOut(auth);
+// ส่งอีเมลยืนยัน
+await sendEmailVerification(userCredential.user);
 
-       registerBtn.disabled = false;
+// ออกจากระบบทันที
+await signOut(auth);
+
+registerBtn.disabled = false;
 registerBtn.textContent = "Register";
 
-alert("สมัครสมาชิกสำเร็จ 🎉");
+alert("สมัครสมาชิกสำเร็จ 🎉\n\nกรุณาตรวจสอบอีเมลและกดลิงก์ยืนยันก่อนเข้าสู่ระบบ");
 
 window.location.href = "login.html";
-
     }catch(error){
 
         switch(error.code){
