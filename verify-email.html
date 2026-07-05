@@ -93,7 +93,7 @@ button:hover{
 
 <p>เราได้ส่งอีเมลยืนยันไปที่</p>
 
-<p class="email" id="email">Loading...</p>
+<p class="email" id="email"></p>
 
 <p>กรุณากดลิงก์ในอีเมลก่อนใช้งานระบบ</p>
 
@@ -120,49 +120,82 @@ import app from "./firebase.js";
 
 import {
     getAuth,
-    sendEmailVerification
+    signInWithEmailAndPassword,
+    sendEmailVerification,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const auth = getAuth(app);
 
-const user = auth.currentUser;
+const params = new URLSearchParams(window.location.search);
+const email = params.get("email");
 
-const emailText = document.getElementById("email");
+document.getElementById("email").textContent = email;
+
 const status = document.getElementById("status");
+    document.getElementById("checkBtn").onclick=async()=>{
 
-if(!user){
-    window.location.href="login.html";
+const password=prompt("กรอกรหัสผ่านเพื่อยืนยันตัวตน");
+
+if(!password)return;
+
+try{
+
+const credential=await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+await reload(credential.user);
+
+if(credential.user.emailVerified){
+
+alert("ยืนยันอีเมลสำเร็จ 🎉");
+
+window.location.href="home.html";
+
+}else{
+
+alert("ยังไม่ได้กดยืนยันอีเมล");
+
+await signOut(auth);
+
 }
 
-emailText.textContent = user.email;
+}catch{
 
+alert("รหัสผ่านไม่ถูกต้อง");
 
-// ตรวจสอบการยืนยันอีเมล
-document.getElementById("verifyBtn").onclick = async ()=>{
-
-    await user.reload();
-
-    if(user.emailVerified){
-
-        alert("ยืนยันอีเมลสำเร็จ 🎉");
-
-        window.location.href="home.html";
-
-    }else{
-
-        status.textContent="ยังไม่ได้ยืนยันอีเมล กรุณาตรวจสอบ Inbox";
-
-    }
+}
 
 };
 
+document.getElementById("resendBtn").onclick=async()=>{
 
-// ส่งอีเมลใหม่
-document.getElementById("resendBtn").onclick = async ()=>{
+const password=prompt("กรอกรหัสผ่าน");
 
-    await sendEmailVerification(user);
+if(!password)return;
 
-    alert("ส่งอีเมลยืนยันอีกครั้งเรียบร้อย");
+try{
+
+const credential=await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+await sendEmailVerification(credential.user);
+
+await signOut(auth);
+
+alert("ส่งอีเมลใหม่แล้ว");
+
+}catch{
+
+alert("ไม่สามารถส่งอีเมลได้");
+
+}
 
 };
 
