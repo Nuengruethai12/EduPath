@@ -171,7 +171,6 @@ import app from "./firebase.js";
 import {
     getAuth,
     createUserWithEmailAndPassword,
-    sendEmailVerification,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -190,24 +189,24 @@ const togglePass2 = document.getElementById("togglePass2");
 
 togglePass1.onclick = () => {
 
-    if(password.type === "password"){
-        password.type = "text";
-        togglePass1.textContent = "Hide";
+    if(password.type==="password"){
+        password.type="text";
+        togglePass1.textContent="Hide";
     }else{
-        password.type = "password";
-        togglePass1.textContent = "Show";
+        password.type="password";
+        togglePass1.textContent="Show";
     }
 
 };
 
 togglePass2.onclick = () => {
 
-    if(confirmPassword.type === "password"){
-        confirmPassword.type = "text";
-        togglePass2.textContent = "Hide";
+    if(confirmPassword.type==="password"){
+        confirmPassword.type="text";
+        togglePass2.textContent="Hide";
     }else{
-        confirmPassword.type = "password";
-        togglePass2.textContent = "Show";
+        confirmPassword.type="password";
+        togglePass2.textContent="Show";
     }
 
 };
@@ -216,7 +215,7 @@ form.addEventListener("submit", async(e)=>{
 
     e.preventDefault();
 
-    errorMessage.textContent = "";
+    errorMessage.textContent="";
 
     const userEmail = email.value.trim();
     const userPassword = password.value;
@@ -235,25 +234,21 @@ form.addEventListener("submit", async(e)=>{
     registerBtn.disabled = true;
     registerBtn.textContent = "Creating account...";
 
-    try{        const userCredential = await createUserWithEmailAndPassword(
+    try{        await createUserWithEmailAndPassword(
             auth,
             userEmail,
             userPassword
         );
 
-        // ส่งอีเมลยืนยัน
-        await sendEmailVerification(userCredential.user);
-
-        // ออกจากระบบ
+        // ออกจากระบบทันทีหลังสมัคร
         await signOut(auth);
 
         registerBtn.disabled = false;
         registerBtn.textContent = "Register";
 
-        // ไปหน้าตรวจสอบอีเมล พร้อมส่งอีเมลไปแสดง
-        window.location.href =
-            "verify-email.html?email=" +
-            encodeURIComponent(userEmail);
+        alert("สมัครสมาชิกสำเร็จ 🎉");
+
+        window.location.href = "login.html";
 
     }catch(error){
 
