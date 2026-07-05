@@ -113,53 +113,53 @@ a:hover{
 
 <div class="login-box">
 
-    <h1>🎓 EduPath</h1>
-    <p>Login to your account</p>
+<h1>🎓 EduPath</h1>
+<p>Login to your account</p>
 
-    <form id="login-form">
+<form id="login-form">
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            autocomplete="email"
-            required>
+<input
+type="email"
+id="email"
+placeholder="Email"
+autocomplete="email"
+required>
 
-        <div class="password-box">
+<div class="password-box">
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                autocomplete="current-password"
-                required>
+<input
+type="password"
+id="password"
+placeholder="Password"
+autocomplete="current-password"
+required>
 
-            <button type="button" id="togglePass">
-                Show
-            </button>
+<button type="button" id="togglePass">
+Show
+</button>
 
-        </div>
+</div>
 
-        <button class="login-btn" type="submit" id="loginBtn">
-            Login
-        </button>
+<button class="login-btn" type="submit" id="loginBtn">
+Login
+</button>
 
-        <div id="error-message"></div>
+<div id="error-message"></div>
 
-    </form>
+</form>
 
-    <p style="margin-top:20px;">
-        <a href="forgot-password.html">
-            Forgot Password?
-        </a>
-    </p>
+<p style="margin-top:20px;">
+<a href="forgot-password.html">
+Forgot Password?
+</a>
+</p>
 
-    <p>
-        Don't have an account?
-        <a href="register.html">
-            Register
-        </a>
-    </p>
+<p>
+Don't have an account?
+<a href="register.html">
+Register
+</a>
+</p>
 
 </div>
 
@@ -170,9 +170,9 @@ import app from "./firebase.js";
 import {
     getAuth,
     signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 const auth = getAuth(app);
 
 const loginForm = document.getElementById("login-form");
@@ -182,14 +182,12 @@ const loginBtn = document.getElementById("loginBtn");
 const errorMessage = document.getElementById("error-message");
 const togglePass = document.getElementById("togglePass");
 
-
 // ถ้าล็อกอินอยู่แล้วให้เข้า Home ทันที
 onAuthStateChanged(auth,(user)=>{
     if(user){
         window.location.href="home.html";
     }
 });
-
 
 // แสดง/ซ่อนรหัสผ่าน
 togglePass.addEventListener("click",()=>{
@@ -204,7 +202,6 @@ togglePass.addEventListener("click",()=>{
 
 });
 
-
 // Login
 loginForm.addEventListener("submit",async(e)=>{
 
@@ -213,83 +210,56 @@ loginForm.addEventListener("submit",async(e)=>{
     errorMessage.textContent="";
 
     const email=emailInput.value.trim();
-
-    // ไม่ trim password
     const password=passwordInput.value;
 
     loginBtn.disabled=true;
     loginBtn.textContent="Logging in...";
 
-    try{
+    try{        await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+        );
 
-        const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-);
+        loginBtn.textContent = "Success ✓";
 
-const user = userCredential.user;
+        setTimeout(()=>{
+            window.location.href = "home.html";
+        },500);
 
-// โหลดข้อมูลล่าสุดจาก Firebase
-await user.reload();
-
-if(!user.emailVerified){
-
-    await signOut(auth);
-
-    errorMessage.innerHTML = `
-        กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ<br><br>
-        <a href="verify-email.html">
-            ไปหน้ายืนยันอีเมล
-        </a>
-    `;
-
-    loginBtn.disabled = false;
-    loginBtn.textContent = "Login";
-
-    return;
-}
-
-loginBtn.disabled = false;
-loginBtn.textContent = "Success ✓";
-
-setTimeout(()=>{
-    window.location.href = "home.html";
-},500);
     }catch(error){
 
         switch(error.code){
 
             case "auth/invalid-email":
-                errorMessage.textContent="อีเมลไม่ถูกต้อง";
+                errorMessage.textContent = "อีเมลไม่ถูกต้อง";
                 break;
 
             case "auth/user-not-found":
-                errorMessage.textContent="ไม่พบบัญชีนี้";
+                errorMessage.textContent = "ไม่พบบัญชีนี้";
                 break;
 
             case "auth/wrong-password":
-                errorMessage.textContent="รหัสผ่านไม่ถูกต้อง";
+                errorMessage.textContent = "รหัสผ่านไม่ถูกต้อง";
                 break;
 
             case "auth/invalid-credential":
-                errorMessage.textContent="อีเมลหรือรหัสผ่านไม่ถูกต้อง";
+                errorMessage.textContent = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
                 break;
 
             case "auth/too-many-requests":
-                errorMessage.textContent="พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณาลองใหม่ภายหลัง";
+                errorMessage.textContent = "พยายามเข้าสู่ระบบหลายครั้งเกินไป กรุณาลองใหม่ภายหลัง";
                 break;
 
             default:
-                errorMessage.textContent=error.message;
+                errorMessage.textContent = error.message;
 
         }
 
-        loginBtn.disabled=false;
-        loginBtn.textContent="Login";
+        loginBtn.disabled = false;
+        loginBtn.textContent = "Login";
 
     }
-
 
 });
 
