@@ -165,10 +165,12 @@ a:hover{
 
 <script type="module">
 
+import app from "./firebase.js";
+
 import {
     getAuth,
-    createUserWithEmailAndPassword,
-    sendEmailVerification,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
