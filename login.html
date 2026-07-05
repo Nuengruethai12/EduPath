@@ -173,7 +173,6 @@ import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
 const auth = getAuth(app);
 
 const loginForm = document.getElementById("login-form");
@@ -223,13 +222,35 @@ loginForm.addEventListener("submit",async(e)=>{
 
     try{
 
-        await signInWithEmailAndPassword(auth,email,password);
+        const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+);
 
-        loginBtn.textContent="Success ✓";
+const user = userCredential.user;
 
-        setTimeout(()=>{
-            window.location.href="home.html";
-        },500);
+// โหลดข้อมูลล่าสุดจาก Firebase
+await user.reload();
+
+if(!user.emailVerified){
+
+    await signOut(auth);
+
+    errorMessage.textContent =
+        "กรุณายืนยันอีเมลก่อนเข้าสู่ระบบ";
+
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Login";
+
+    return;
+}
+
+loginBtn.textContent = "Success ✓";
+
+setTimeout(()=>{
+    window.location.href="home.html";
+},500);
 
     }catch(error){
 
