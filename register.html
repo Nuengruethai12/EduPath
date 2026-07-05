@@ -162,6 +162,8 @@ a:hover{
 
 <script type="module">
 
+import app from "./firebase.js";
+
 import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -210,68 +212,67 @@ form.addEventListener("submit", async(e)=>{
 
     errorMessage.textContent="";
 
-    const userEmail=email.value.trim();
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
+    const confirm = confirmPassword.value;
 
-    // ไม่ใช้ trim กับ password
-    const userPassword=password.value;
-    const confirm=confirmPassword.value;
-
-    if(userPassword!==confirm){
-        errorMessage.textContent="รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
+    if(userPassword !== confirm){
+        errorMessage.textContent = "รหัสผ่านและยืนยันรหัสผ่านไม่ตรงกัน";
         return;
     }
 
-    if(userPassword.length<6){
-        errorMessage.textContent="รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
+    if(userPassword.length < 6){
+        errorMessage.textContent = "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร";
         return;
     }
 
-    registerBtn.disabled=true;
-    registerBtn.textContent="Creating account...";
+    registerBtn.disabled = true;
+    registerBtn.textContent = "Creating account...";
 
     try{
 
-     const userCredential = await createUserWithEmailAndPassword(
-    auth,
-    userEmail,
-    userPassword
-);
+        const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            userEmail,
+            userPassword
+        );
 
-// ส่งอีเมลยืนยัน
-await sendEmailVerification(userCredential.user);
+        // ส่งอีเมลยืนยัน
+        await sendEmailVerification(userCredential.user);
 
-// ออกจากระบบทันที
-await signOut(auth);
+        // ออกจากระบบทันที
+        await signOut(auth);
 
-registerBtn.disabled = false;
-registerBtn.textContent = "Register";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Register";
 
-alert("สมัครสมาชิกสำเร็จ 🎉\n\nกรุณาตรวจสอบอีเมลและกดลิงก์ยืนยันก่อนเข้าสู่ระบบ");
+        alert("สมัครสมาชิกสำเร็จ 🎉\n\nกรุณาตรวจสอบอีเมลและกดลิงก์ยืนยันก่อนเข้าสู่ระบบ");
 
-window.location.href = "login.html";
+        window.location.href = "login.html";
+
     }catch(error){
 
         switch(error.code){
 
             case "auth/email-already-in-use":
-                errorMessage.textContent="อีเมลนี้ถูกใช้งานแล้ว";
+                errorMessage.textContent = "อีเมลนี้ถูกใช้งานแล้ว";
                 break;
 
             case "auth/invalid-email":
-                errorMessage.textContent="รูปแบบอีเมลไม่ถูกต้อง";
+                errorMessage.textContent = "รูปแบบอีเมลไม่ถูกต้อง";
                 break;
 
             case "auth/weak-password":
-                errorMessage.textContent="รหัสผ่านไม่ปลอดภัย";
+                errorMessage.textContent = "รหัสผ่านไม่ปลอดภัย";
                 break;
 
             default:
-                errorMessage.textContent=error.message;
+                errorMessage.textContent = error.message;
 
         }
 
-        registerBtn.disabled=false;
-        registerBtn.textContent="Register";
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Register";
 
     }
 
