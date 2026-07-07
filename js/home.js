@@ -3,7 +3,7 @@
 // home.js (Part 1)
 // =====================================
 
-import app from "./firebase.js";
+import app from "../../firebase.js";
 
 import {
     getAuth,
