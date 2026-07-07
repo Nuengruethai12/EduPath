@@ -1,72 +1,99 @@
+// =====================================
+// EduPath Search Engine v2
 // search.js
+// =====================================
 
+// ---------- Elements ----------
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
 const results = document.getElementById("results");
 const detail = document.getElementById("detail");
 
 let currentType = "all";
+let database = [];
 
-// ======================
-// ข้อมูลตัวอย่าง
-// ======================
+// =====================================
+// โหลดข้อมูลมหาวิทยาลัยจาก API
+// =====================================
 
-let database = [
-    async function loadUniversities(keyword=""){
+async function loadUniversities(keyword = "") {
 
-    const url =
-    `https://universities.hipolabs.com/search?name=${encodeURIComponent(keyword)}`;
+    try {
 
-    const response = await fetch(url);
+        results.innerHTML = `
+            <div class="empty">
+                กำลังค้นหา...
+            </div>
+        `;
 
-    const data = await response.json();
+        const response = await fetch(
+            `https://universities.hipolabs.com/search?name=${encodeURIComponent(keyword)}`
+        );
 
-    database = data.map(item=>({
+        const data = await response.json();
 
-        title:item.name,
+        database = data.map(item => ({
 
-        subtitle:item.country,
+            title: item.name,
 
-        location:item["state-province"] || "",
+            subtitle: item.country,
 
-        description:item.web_pages[0],
+            location: item["state-province"] || "-",
 
-        image:"https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+            description: item.web_pages[0],
 
-    }));
+            image:
+                "https://cdn-icons-png.flaticon.com/512/3135/3135755.png",
 
-    render(database);
+            type: "university"
+
+        }));
+
+        render(database);
+
+    } catch (error) {
+
+        console.error(error);
+
+        results.innerHTML = `
+            <div class="empty">
+                ไม่สามารถโหลดข้อมูลได้
+            </div>
+        `;
+
+    }
 
 }
-];
 
-// ======================
-// แสดงข้อมูล
-// ======================
+// =====================================
+// แสดงผล
+// =====================================
 
-function render(data){
+function render(data) {
 
-    results.innerHTML="";
+    results.innerHTML = "";
 
-    if(data.length===0){
+    if (data.length === 0) {
 
-        results.innerHTML=`
+        results.innerHTML = `
             <div class="empty">
                 ไม่พบข้อมูล
             </div>
         `;
 
+        detail.innerHTML = "";
+
         return;
 
     }
 
-    data.forEach(item=>{
+    data.forEach(item => {
 
-        const card=document.createElement("div");
+        const card = document.createElement("div");
 
-        card.className="result-card";
+        card.className = "result-card";
 
-        card.innerHTML=`
+        card.innerHTML = `
 
             <h3>${item.title}</h3>
 
@@ -76,23 +103,7 @@ function render(data){
 
         `;
 
-        card.onclick=()=>{
-
-            detail.innerHTML=`
-
-                <img src="${item.image}">
-
-                <h2>${item.title}</h2>
-
-                <p><b>ประเภท :</b> ${item.subtitle}</p>
-
-                <p><b>ข้อมูล :</b> ${item.description}</p>
-
-                <p><b>สถานที่ :</b> ${item.location}</p>
-
-            `;
-
-        };
+        card.onclick = () => showDetail(item);
 
         results.appendChild(card);
 
@@ -100,83 +111,123 @@ function render(data){
 
 }
 
-// ======================
+// =====================================
+// แสดงรายละเอียด
+// =====================================
+
+function showDetail(item) {
+
+    detail.innerHTML = `
+
+        <img src="${item.image}" alt="${item.title}">
+
+        <h2>${item.title}</h2>
+
+        <p><b>ประเทศ :</b> ${item.subtitle}</p>
+
+        <p><b>เมือง/รัฐ :</b> ${item.location}</p>
+
+        <p>
+            <b>เว็บไซต์ :</b><br>
+            <a href="${item.description}" target="_blank">
+                ${item.description}
+            </a>
+        </p>
+
+    `;
+
+}
+// =====================================
 // ค้นหา
-// ======================
+// =====================================
 
-function search(){
+function search() {
 
-    const keyword=searchInput.value.toLowerCase();
+    const keyword = searchInput.value.trim();
 
-    const filtered=database.filter(item=>{
-
-        const matchKeyword=
-
-        item.title.toLowerCase().includes(keyword) ||
-
-        item.description.toLowerCase().includes(keyword);
-
-        const matchType=
-
-        currentType==="all" ||
-
-        item.type===currentType;
-
-        return matchKeyword && matchType;
-
-    });
-
-    render(filtered);
+    loadUniversities(keyword);
 
 }
 
-// ======================
+// =====================================
 // Search Button
-// ======================
+// =====================================
 
-searchBtn.addEventListener("click",search);
+searchBtn.addEventListener("click", search);
 
-// ======================
-// Enter
-// ======================
+// =====================================
+// Enter Key
+// =====================================
 
-searchInput.addEventListener("input",()=>{
+searchInput.addEventListener("keypress", (e) => {
 
-    loadUniversities(searchInput.value);
+    if (e.key === "Enter") {
+
+        e.preventDefault();
+
+        search();
+
+    }
 
 });
-// ======================
+
+// =====================================
 // Realtime Search
-// ======================
+// =====================================
 
-searchInput.addEventListener("input",search);
+let typingTimer;
 
-// ======================
+searchInput.addEventListener("input", () => {
+
+    clearTimeout(typingTimer);
+
+    typingTimer = setTimeout(() => {
+
+        search();
+
+    }, 400);
+
+});
+
+// =====================================
 // Filter
-// ======================
+// =====================================
 
-document.querySelectorAll(".filter").forEach(btn=>{
+document.querySelectorAll(".filter").forEach(btn => {
 
-    btn.onclick=()=>{
+    btn.addEventListener("click", () => {
 
-        document.querySelectorAll(".filter").forEach(b=>{
+        document.querySelectorAll(".filter").forEach(item => {
 
-            b.classList.remove("active");
+            item.classList.remove("active");
 
         });
 
         btn.classList.add("active");
 
-        currentType=btn.dataset.type;
+        currentType = btn.dataset.type;
 
         search();
 
-    };
+    });
 
 });
 
-// ======================
+// =====================================
 // โหลดข้อมูลครั้งแรก
-// ======================
+// =====================================
 
 loadUniversities();
+
+
+// =====================================
+// Export (ใช้ในอนาคต)
+// =====================================
+
+window.eduPathSearch = {
+
+    search,
+    loadUniversities,
+    render
+
+};
