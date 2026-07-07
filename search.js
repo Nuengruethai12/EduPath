@@ -11,62 +11,33 @@ let currentType = "all";
 // ข้อมูลตัวอย่าง
 // ======================
 
-const database = [
+let database = [
+    async function loadUniversities(keyword=""){
 
-{
-    type:"university",
-    title:"Chulalongkorn University",
-    subtitle:"มหาวิทยาลัย",
-    location:"Bangkok, Thailand",
-    description:"มหาวิทยาลัยชั้นนำของประเทศไทย",
-    image:"https://picsum.photos/400/220?1"
-},
+    const url =
+    `https://universities.hipolabs.com/search?name=${encodeURIComponent(keyword)}`;
 
-{
-    type:"university",
-    title:"Kasetsart University",
-    subtitle:"มหาวิทยาลัย",
-    location:"Bangkok, Thailand",
-    description:"มหาวิทยาลัยด้านเกษตรศาสตร์และวิทยาศาสตร์",
-    image:"https://picsum.photos/400/220?2"
-},
+    const response = await fetch(url);
 
-{
-    type:"program",
-    title:"Computer Science",
-    subtitle:"คณะ",
-    location:"Bachelor Degree",
-    description:"เรียนเกี่ยวกับการพัฒนาซอฟต์แวร์ AI และ Data",
-    image:"https://picsum.photos/400/220?3"
-},
+    const data = await response.json();
 
-{
-    type:"career",
-    title:"Software Engineer",
-    subtitle:"อาชีพ",
-    location:"Technology",
-    description:"พัฒนาโปรแกรมและระบบสารสนเทศ",
-    image:"https://picsum.photos/400/220?4"
-},
+    database = data.map(item=>({
 
-{
-    type:"research",
-    title:"Machine Learning Research",
-    subtitle:"งานวิจัย",
-    location:"AI",
-    description:"งานวิจัยด้าน Machine Learning",
-    image:"https://picsum.photos/400/220?5"
-},
+        title:item.name,
 
-{
-    type:"course",
-    title:"Python Programming",
-    subtitle:"คอร์สเรียน",
-    location:"Online",
-    description:"เรียน Python ตั้งแต่พื้นฐานจนถึงขั้นสูง",
-    image:"https://picsum.photos/400/220?6"
+        subtitle:item.country,
+
+        location:item["state-province"] || "",
+
+        description:item.web_pages[0],
+
+        image:"https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+
+    }));
+
+    render(database);
+
 }
-
 ];
 
 // ======================
@@ -169,16 +140,11 @@ searchBtn.addEventListener("click",search);
 // Enter
 // ======================
 
-searchInput.addEventListener("keyup",(e)=>{
+searchInput.addEventListener("input",()=>{
 
-    if(e.key==="Enter"){
-
-        search();
-
-    }
+    loadUniversities(searchInput.value);
 
 });
-
 // ======================
 // Realtime Search
 // ======================
@@ -213,4 +179,4 @@ document.querySelectorAll(".filter").forEach(btn=>{
 // โหลดข้อมูลครั้งแรก
 // ======================
 
-render(database);
+loadUniversities();
