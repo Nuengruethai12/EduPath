@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EduPath Search</title>
+
+<link rel="stylesheet" href="search.css">
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<header class="navbar">
+
+    <div class="logo">
+        🎓 EduPath
+    </div>
+
+    <div class="nav-right">
+
+        <span id="user-email">
+            Loading...
+        </span>
+
+        <button id="backBtn">
+            Home
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- Search Container -->
+
+<div class="container">
+
+    <div class="search-header">
+
+        <h1>
+            🔍 Search Education
+        </h1>
+
+        <p>
+            ค้นหามหาวิทยาลัย คณะ อาชีพ งานวิจัย และคอร์สเรียน
+        </p>
+
+    </div>
+
+
+    <!-- Search Box -->
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="ค้นหามหาวิทยาลัย คณะ อาชีพ..."
+
+            autocomplete="off">
+
+        <button id="searchBtn">
+
+            Search
+
+        </button>
+
+    </div>
+
+
+    <!-- Filter -->
+
+    <div class="filter-bar">
+
+        <button class="filter active"
+            data-type="all">
+
+            All
+
+        </button>
+
+        <button class="filter"
+            data-type="university">
+
+            University
+
+        </button>
+
+        <button class="filter"
+            data-type="program">
+
+            Program
+
+        </button>
+
+        <button class="filter"
+            data-type="career">
+
+            Career
+
+        </button>
+
+        <button class="filter"
+            data-type="research">
+
+            Research
+
+        </button>
+
+        <button class="filter"
+            data-type="course">
+
+            Course
+
+        </button>
+
+    </div>
+
+
+    <!-- Main Layout -->
+
+    <div class="content">
+
+
+        <!-- Left -->
+
+        <div class="result-panel">
+
+            <h2>
+
+                Search Results
+
+            </h2>
+
+            <div id="results">
+
+                <!-- Card จะถูกสร้างจาก search.js -->
+
+            </div>
+
+        </div>
+
+
+        <!-- Right -->
+
+        <div class="detail-panel">
+
+            <h2>
+
+                Detail
+
+            </h2>
+
+            <div id="detail">
+
+                <p>
+
+                    เลือกรายการจากผลการค้นหา
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<script type="module">
+
+import app from "./firebase.js";
+
+import {
+    getAuth,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const auth = getAuth(app);
+
+const userEmail = document.getElementById("user-email");
+const backBtn = document.getElementById("backBtn");
+
+// ตรวจสอบการ Login
+onAuthStateChanged(auth, (user) => {
+
+    if(user){
+
+        userEmail.textContent = user.email;
+
+    }else{
+
+        window.location.href = "login.html";
+
+    }
+
+});
+
+// ปุ่มกลับหน้า Home
+backBtn.addEventListener("click", ()=>{
+
+    window.location.href = "home.html";
+
+});
+
+</script>
+
+<!-- ไฟล์ระบบค้นหา -->
+<script src="search.js"></script>
+
+</body>
+</html>
