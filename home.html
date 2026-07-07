@@ -1,150 +1,710 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduPath - Home</title>
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-    body {
-      background: linear-gradient(135deg, #f4f8ff, #e0f0ff);
-      min-height: 100vh;
-    }
-    .navbar {
-      background: #1e40af;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .container {
-      max-width: 1200px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
-    .welcome {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      text-align: center;
-      transition: 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    .card h3 { color: #1e40af; margin: 15px 0; }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #1e40af;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
-    button:hover { background: #2a5bc8; }
-  </style>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>EduPath Dashboard</title>
+
+<link rel="stylesheet" href="home.css">
+
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+rel="stylesheet">
+
 </head>
+
 <body>
 
-  <div class="navbar">
-    <h2>🎓 EduPath</h2>
-    <div>
-      <span id="user-email">Loading...</span> | 
-      <a href="#" id="logoutBtn" style="color:white; margin-left:15px;">Logout</a>
-    </div>
-  </div>
+<div class="layout">
 
-  <div class="container">
-    <div class="welcome">
-      <h1>ยินดีต้อนรับกลับมา! 👋</h1>
-      <p>พร้อมเรียนรู้และวางแผนอนาคตของคุณแล้วหรือยัง?</p>
-    </div>
+<!-- ================= Sidebar ================= -->
 
-    <div class="card-grid">
-      <!-- Card 1 -->
-      <div class="card">
-        <h3>📝 จดโน้ต</h3>
-        <p>บันทึกความรู้ จัดหมวดหมู่ และค้นหาโน้ตได้ง่าย</p>
-        <button onclick="goToNotes()">ไปที่โน้ตของฉัน</button>
-      </div>
+<aside class="sidebar">
 
-      <!-- Card 2 -->
-      <div class="card">
-        <h3>🔎 ค้นหาข้อมูลการศึกษา</h3>
-        <p>ค้นหาคณะ มหาวิทยาลัย และเส้นทางเรียนต่อ</p>
-        <button onclick="goToSearch()">ค้นหาตอนนี้</button>
-      </div>
+<div class="logo">
 
-      <!-- Card 3 -->
-      <div class="card">
-        <h3>🤖 AI Advisor</h3>
-        <p>ผู้ช่วย AI แนะนำคณะและเส้นทางเรียนที่เหมาะกับคุณ</p>
-        <button onclick="goToAI()">เริ่มปรึกษา AI</button>
-      </div>
+<h2>🎓 EduPath</h2>
 
-      <!-- Card 4 -->
-      <div class="card">
-        <h3>🛒 Marketplace</h3>
-        <p>ซื้อ-ขายโน้ตและคอร์สเรียนจากผู้สอนจริง</p>
-        <button onclick="goToMarket()">เข้าสู่ Marketplace</button>
-      </div>
-    </div>
-  </div>
+<p>AI Education Platform</p>
 
-  <script type="module">
-    import app from './firebase.js';
-   import {
-  getAuth,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+</div>
 
-    const auth = getAuth(app);
+<nav>
 
-    // ตรวจสอบว่าล็อกอินหรือยัง
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.getElementById('user-email').textContent = user.email;
-      } else {
-        window.location.href = "login.html"; // ถ้ายังไม่ได้ล็อกอิน ให้กลับไปหน้า Login
-      }
-    });
+<a class="active" href="home.html">
 
-    // ฟังก์ชันตัวอย่าง (ยังเป็นหน้าเปล่า)
-    function goToNotes() { alert("กำลังพัฒนาหน้าโน้ต..."); }
-    function goToSearch() { alert("กำลังพัฒนาหน้าค้นหา..."); }
-    function goToAI() { alert("กำลังพัฒนา AI Advisor..."); }
-    function goToMarket() { alert("กำลังพัฒนา Marketplace..."); }
-    // Logout
-const logoutBtn = document.getElementById("logoutBtn");
+<i class="fa-solid fa-house"></i>
 
-logoutBtn.addEventListener("click", async (e) => {
-  e.preventDefault();
+<span>Dashboard</span>
 
-  try {
-    await signOut(auth);
+</a>
 
-    alert("ออกจากระบบสำเร็จ");
+<a href="learn.html">
 
-    window.location.href = "login.html";
-  } catch (error) {
-    alert("เกิดข้อผิดพลาด: " + error.message);
-  }
-});
-  </script>
+<i class="fa-solid fa-book-open"></i>
+
+<span>Learn</span>
+
+</a>
+
+<a href="search.html">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<span>Search</span>
+
+</a>
+
+<a href="note.html">
+
+<i class="fa-solid fa-note-sticky"></i>
+
+<span>My Notes</span>
+
+</a>
+
+<a href="ai.html">
+
+<i class="fa-solid fa-robot"></i>
+
+<span>AI Advisor</span>
+
+</a>
+
+<a href="flashcards.html">
+
+<i class="fa-solid fa-layer-group"></i>
+
+<span>Flashcards</span>
+
+</a>
+
+<a href="planner.html">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<span>Planner</span>
+
+</a>
+
+<a href="marketplace.html">
+
+<i class="fa-solid fa-store"></i>
+
+<span>Marketplace</span>
+
+</a>
+
+<a href="analytics.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>Analytics</span>
+
+</a>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input
+type="text"
+placeholder="Search universities, careers, courses, research...">
+
+</div>
+
+<div class="top-actions">
+
+<button>
+
+<i class="fa-solid fa-bell"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-gear"></i>
+
+</button>
+
+<div class="avatar">
+
+<img
+src="https://i.pravatar.cc/100"
+alt="avatar">
+
+</div>
+
+</div>
+
+</header>
+
+<section class="welcome-card">
+
+<h1>
+
+Welcome back 👋
+
+</h1>
+
+<p>
+
+Continue your learning journey with AI.
+
+</p>
+
+<div class="welcome-buttons">
+
+<a href="learn.html">
+
+Continue Learning
+
+</a>
+
+<a href="search.html">
+
+Explore Universities
+
+</a>
+
+</div>
+
+</section>
+<!-- ================= Quick Actions ================= -->
+
+<section class="quick-actions">
+
+<div class="section-title">
+
+<h2>Quick Access</h2>
+
+<a href="#">View All</a>
+
+</div>
+
+<div class="card-grid">
+
+<a href="search.html" class="action-card">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<h3>Search</h3>
+
+<p>Universities, careers, courses & research</p>
+
+</a>
+
+<a href="learn.html" class="action-card">
+
+<i class="fa-solid fa-book-open"></i>
+
+<h3>Learn</h3>
+
+<p>Continue your learning journey</p>
+
+</a>
+
+<a href="note.html" class="action-card">
+
+<i class="fa-solid fa-note-sticky"></i>
+
+<h3>My Notes</h3>
+
+<p>Create and organize your knowledge</p>
+
+</a>
+
+<a href="ai.html" class="action-card">
+
+<i class="fa-solid fa-robot"></i>
+
+<h3>AI Advisor</h3>
+
+<p>Ask AI anything about education</p>
+
+</a>
+
+<a href="planner.html" class="action-card">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<h3>Planner</h3>
+
+<p>Manage study plans and deadlines</p>
+
+</a>
+
+<a href="flashcards.html" class="action-card">
+
+<i class="fa-solid fa-layer-group"></i>
+
+<h3>Flashcards</h3>
+
+<p>Review smarter with spaced repetition</p>
+
+</a>
+
+<a href="analytics.html" class="action-card">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h3>Analytics</h3>
+
+<p>Track your learning progress</p>
+
+</a>
+
+<a href="marketplace.html" class="action-card">
+
+<i class="fa-solid fa-store"></i>
+
+<h3>Marketplace</h3>
+
+<p>Templates, notes and study resources</p>
+
+</a>
+
+</div>
+
+</section>
+
+
+<!-- ================= Continue Learning ================= -->
+
+<section class="continue-learning">
+
+<div class="section-title">
+
+<h2>Continue Learning</h2>
+
+<a href="learn.html">
+
+See More
+
+</a>
+
+</div>
+
+<div class="course-card">
+
+<div class="course-info">
+
+<h3>
+
+Introduction to Artificial Intelligence
+
+</h3>
+
+<p>
+
+Progress : 65%
+
+</p>
+
+<div class="progress">
+
+<div class="progress-bar" style="width:65%;"></div>
+
+</div>
+
+<a href="learn.html" class="continue-btn">
+
+Continue
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= AI Advisor ================= -->
+
+<section class="ai-widget">
+
+<div class="section-title">
+
+<h2>
+
+AI Advisor
+
+</h2>
+
+</div>
+
+<div class="ai-box">
+
+<h3>
+
+🤖 How can I help you today?
+
+</h3>
+
+<p>
+
+Ask about universities, careers,
+courses or learning plans.
+
+</p>
+
+<div class="ai-buttons">
+
+<a href="ai.html">
+
+Ask AI
+
+</a>
+
+<a href="search.html">
+
+Search Knowledge
+
+</a>
+
+</div>
+
+</div>
+
+</section>
+<!-- ================= Dashboard Grid ================= -->
+
+<div class="dashboard-grid">
+
+<!-- ===== Left Column ===== -->
+
+<div class="dashboard-left">
+
+<!-- Recommended Universities -->
+
+<section class="dashboard-card">
+
+<div class="section-title">
+
+<h2>⭐ Recommended Universities</h2>
+
+<a href="search.html">View All</a>
+
+</div>
+
+<div class="recommend-list">
+
+<div class="recommend-item">
+
+<div>
+
+<h3>Massachusetts Institute of Technology</h3>
+
+<p>United States</p>
+
+</div>
+
+<a href="search.html">View</a>
+
+</div>
+
+<div class="recommend-item">
+
+<div>
+
+<h3>Harvard University</h3>
+
+<p>United States</p>
+
+</div>
+
+<a href="search.html">View</a>
+
+</div>
+
+<div class="recommend-item">
+
+<div>
+
+<h3>University of Oxford</h3>
+
+<p>United Kingdom</p>
+
+</div>
+
+<a href="search.html">View</a>
+
+</div>
+
+<div class="recommend-item">
+
+<div>
+
+<h3>National University of Singapore</h3>
+
+<p>Singapore</p>
+
+</div>
+
+<a href="search.html">View</a>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- Recent Notes -->
+
+<section class="dashboard-card">
+
+<div class="section-title">
+
+<h2>📝 Recent Notes</h2>
+
+<a href="note.html">Open</a>
+
+</div>
+
+<div class="notes-list">
+
+<div class="note-item">
+
+<h3>Biology Chapter 5</h3>
+
+<p>Updated today</p>
+
+</div>
+
+<div class="note-item">
+
+<h3>Physics Formula</h3>
+
+<p>Yesterday</p>
+
+</div>
+
+<div class="note-item">
+
+<h3>Programming JavaScript</h3>
+
+<p>2 days ago</p>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<!-- ===== Right Column ===== -->
+
+<div class="dashboard-right">
+
+<!-- Weekly Progress -->
+
+<section class="dashboard-card">
+
+<div class="section-title">
+
+<h2>📊 Weekly Progress</h2>
+
+</div>
+
+<h1 class="progress-number">
+
+68%
+
+</h1>
+
+<div class="progress">
+
+<div class="progress-bar"
+
+style="width:68%;">
+
+</div>
+
+</div>
+
+<p>
+
+You've completed 12 learning activities this week.
+
+</p>
+
+</section>
+
+<!-- Planner -->
+
+<section class="dashboard-card">
+
+<div class="section-title">
+
+<h2>📅 Today's Planner</h2>
+
+<a href="planner.html">
+
+Open
+
+</a>
+
+</div>
+
+<div class="planner-item">
+
+<span>09:00</span>
+
+<p>Study Mathematics</p>
+
+</div>
+
+<div class="planner-item">
+
+<span>13:30</span>
+
+<p>AI Course</p>
+
+</div>
+
+<div class="planner-item">
+
+<span>19:00</span>
+
+<p>Review Flashcards</p>
+
+</div>
+
+</section>
+
+<!-- Learning Statistics -->
+
+<section class="dashboard-card">
+
+<div class="section-title">
+
+<h2>📈 Statistics</h2>
+
+</div>
+
+<div class="stat-box">
+
+<div>
+
+<h3>25</h3>
+
+<p>Notes</p>
+
+</div>
+
+<div>
+
+<h3>12</h3>
+
+<p>Flashcards</p>
+
+</div>
+
+<div>
+
+<h3>5</h3>
+
+<p>Courses</p>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</div>
+<!-- ================= Footer ================= -->
+
+<footer class="footer">
+
+<p>
+
+© 2026 EduPath
+
+AI Education Platform
+
+</p>
+
+</footer>
+
+</main>
+
+</div>
+
+<!-- ================= Mobile Bottom Navigation ================= -->
+
+<nav class="mobile-nav">
+
+<a class="active" href="home.html">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Home</span>
+
+</a>
+
+<a href="search.html">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<span>Search</span>
+
+</a>
+
+<a href="learn.html">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Learn</span>
+
+</a>
+
+<a href="ai.html">
+
+<i class="fa-solid fa-robot"></i>
+
+<span>AI</span>
+
+</a>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</a>
+
+</nav>
+
+<script type="module" src="home.js"></script>
+
 </body>
+
 </html>
