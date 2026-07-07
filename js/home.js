@@ -1,16 +1,21 @@
 // =====================================
 // EduPath Dashboard 2.0
-// home.js (Part 1)
+// js/home.js
 // =====================================
 
-import app from "../../firebase.js";
+import app from "../firebase.js";
 
 import {
     getAuth,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    onAuthStateChanged,
+    signOut
+} 
+from 
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
 
 const auth = getAuth(app);
+
 
 // =====================================
 // DOM
@@ -20,140 +25,114 @@ const welcomeTitle = document.querySelector(".welcome-card h1");
 const welcomeText = document.querySelector(".welcome-card p");
 const avatar = document.querySelector(".avatar img");
 
+const searchInput = document.querySelector(".search-box input");
+
+const notificationBtn =
+document.querySelectorAll(".top-actions button")[0];
+
+const settingsBtn =
+document.querySelectorAll(".top-actions button")[1];
+
+const navLinks =
+document.querySelectorAll(".sidebar nav a");
+
+const mobileLinks =
+document.querySelectorAll(".mobile-nav a");
+
+
 // =====================================
-// User
+// Current User
 // =====================================
 
 let currentUser = null;
 
+
 // =====================================
-// Auth Check
+// Authentication
 // =====================================
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth,(user)=>{
 
-    if (!user) {
+    if(!user){
 
-        // ยังไม่ได้ Login
-        window.location.href = "login.html";
+        window.location.href="login.html";
         return;
 
     }
 
-    currentUser = user;
+
+    currentUser=user;
 
     loadUser();
 
 });
 
+
 // =====================================
 // Load User
 // =====================================
 
-function loadUser() {
+function loadUser(){
 
-    if (!currentUser) return;
+    if(!currentUser) return;
 
-    // ชื่อผู้ใช้
 
-    let displayName = "";
+    let name =
+    currentUser.displayName ||
+    currentUser.email.split("@")[0];
 
-    if (currentUser.displayName) {
 
-        displayName = currentUser.displayName;
+    if(welcomeTitle){
 
-    } else {
-
-        displayName = currentUser.email.split("@")[0];
+        welcomeTitle.textContent =
+        `${getGreeting()}, ${name} 👋`;
 
     }
 
-    // Welcome
 
-    welcomeTitle.textContent =
-        `Welcome back, ${displayName} 👋`;
+    if(welcomeText){
 
-    welcomeText.textContent =
+        welcomeText.textContent =
         "Continue your learning journey with EduPath AI.";
 
-    // Avatar
+    }
 
-    if (currentUser.photoURL) {
 
-        avatar.src = currentUser.photoURL;
+    if(
+        avatar &&
+        currentUser.photoURL
+    ){
+
+        avatar.src=currentUser.photoURL;
 
     }
 
 }
 
+
 // =====================================
-// Greeting ตามเวลา
+// Greeting
 // =====================================
 
-function getGreeting() {
+function getGreeting(){
 
-    const hour = new Date().getHours();
+    const hour =
+    new Date().getHours();
 
-    if (hour < 12) {
 
+    if(hour < 12)
         return "Good Morning";
 
-    }
 
-    if (hour < 18) {
-
+    if(hour < 18)
         return "Good Afternoon";
 
-    }
 
     return "Good Evening";
 
 }
 
-// =====================================
-// Greeting Update
-// =====================================
 
-function updateGreeting() {
-
-    if (!currentUser) return;
-
-    let name = "";
-
-    if (currentUser.displayName) {
-
-        name = currentUser.displayName;
-
-    } else {
-
-        name = currentUser.email.split("@")[0];
-
-    }
-
-    welcomeTitle.textContent =
-        `${getGreeting()}, ${name} 👋`;
-
-}
-
-updateGreeting();
-// =====================================
-// Home.js Part 2
-// Logout
-// Navigation
-// Search
-// =====================================
-
-// ---------- Elements ----------
-
-const searchInput = document.querySelector(".search-box input");
-
-const notificationBtn = document.querySelectorAll(".top-actions button")[0];
-
-const settingsBtn = document.querySelectorAll(".top-actions button")[1];
-
-const navLinks = document.querySelectorAll(".sidebar nav a");
-
-const mobileLinks = document.querySelectorAll(".mobile-nav a");
 
 // =====================================
 // Search
@@ -161,163 +140,206 @@ const mobileLinks = document.querySelectorAll(".mobile-nav a");
 
 function goSearch(){
 
-    const keyword = searchInput.value.trim();
+    if(!searchInput) return;
+
+
+    const keyword =
+    searchInput.value.trim();
+
 
     if(keyword===""){
 
         window.location.href="search.html";
 
-    }else{
+    }
 
-        window.location.href=
+    else{
+
+        window.location.href =
         `search.html?q=${encodeURIComponent(keyword)}`;
 
     }
 
 }
 
-searchInput.addEventListener("keydown",(e)=>{
 
-    if(e.key==="Enter"){
+if(searchInput){
 
-        goSearch();
+    searchInput.addEventListener(
+        "keydown",
+        (e)=>{
 
-    }
+            if(e.key==="Enter"){
 
-});
+                goSearch();
+
+            }
+
+        }
+    );
+
+}
+
+
 
 // =====================================
-// Sidebar Active
+// Navigation Active
 // =====================================
 
-const currentPage = window.location.pathname
+const currentPage =
+window.location.pathname
 .split("/")
 .pop();
 
+
+
 navLinks.forEach(link=>{
 
-    const href = link.getAttribute("href");
-
-    if(href===currentPage){
+    if(
+        link.getAttribute("href")
+        ===
+        currentPage
+    ){
 
         link.classList.add("active");
-
-    }else{
-
-        link.classList.remove("active");
 
     }
 
 });
 
-// =====================================
-// Mobile Active
-// =====================================
+
 
 mobileLinks.forEach(link=>{
 
-    const href = link.getAttribute("href");
-
-    if(href===currentPage){
+    if(
+        link.getAttribute("href")
+        ===
+        currentPage
+    ){
 
         link.classList.add("active");
-
-    }else{
-
-        link.classList.remove("active");
 
     }
 
 });
+
+
 
 // =====================================
 // Notification
 // =====================================
 
-notificationBtn.onclick=()=>{
+if(notificationBtn){
 
-    alert(
+    notificationBtn.onclick=()=>{
+
+        alert(
 `Notifications
 
 • Welcome to EduPath 🎉
 
 • AI Advisor is ready.
 
-• Continue your learning today!`
-    );
+• Continue learning today!`
+        );
 
-};
+    };
+
+}
+
+
 
 // =====================================
 // Settings
 // =====================================
 
-settingsBtn.onclick=()=>{
+if(settingsBtn){
 
-    window.location.href="profile.html";
+    settingsBtn.onclick=()=>{
 
-};
+        window.location.href="profile.html";
+
+    };
+
+}
+
+
 
 // =====================================
 // Logout
 // =====================================
 
-import{
-signOut
-}
-from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+async function logout(){
 
-function logout(){
-
-    const ok=confirm(
-"ออกจากระบบใช่หรือไม่?"
+    const confirmLogout =
+    confirm(
+    "ออกจากระบบใช่หรือไม่?"
     );
 
-    if(!ok) return;
 
-    signOut(auth)
+    if(!confirmLogout)
+        return;
 
-    .then(()=>{
+
+    try{
+
+        await signOut(auth);
 
         window.location.href="login.html";
 
-    })
+    }
 
-    .catch((error)=>{
+    catch(error){
 
         alert(error.message);
 
-    });
+    }
 
 }
 
+
+
 // =====================================
-// Logout Button Auto
+// Create Logout Button
 // =====================================
 
-const profileMenu=document.createElement("button");
+const topActions =
+document.querySelector(".top-actions");
 
-profileMenu.innerHTML=
-'<i class="fa-solid fa-right-from-bracket"></i>';
 
-profileMenu.title="Logout";
+if(topActions){
 
-profileMenu.className="logout-btn";
+    const logoutBtn =
+    document.createElement("button");
 
-profileMenu.onclick=logout;
 
-document
-.querySelector(".top-actions")
-.appendChild(profileMenu);
+    logoutBtn.className =
+    "logout-btn";
+
+
+    logoutBtn.innerHTML =
+    '<i class="fa-solid fa-right-from-bracket"></i>';
+
+
+    logoutBtn.title =
+    "Logout";
+
+
+    logoutBtn.onclick =
+    logout;
+
+
+    topActions.appendChild(logoutBtn);
+
+}
+
+
+
 // =====================================
-// Home.js Part 3
 // Dashboard Data
 // =====================================
 
-// ---------- Statistics ----------
-
-const statistics = {
+const statistics={
 
     notes:25,
 
@@ -327,124 +349,37 @@ const statistics = {
 
 };
 
-// =====================================
-// Update Statistics
-// =====================================
+
 
 function loadStatistics(){
 
-    const statNumbers =
-        document.querySelectorAll(".stat-box h3");
+    const stats =
+    document.querySelectorAll(
+    ".stat-box h3"
+    );
 
-    if(statNumbers.length<3) return;
 
-    statNumbers[0].textContent =
+    if(stats.length>=3){
+
+        stats[0].textContent =
         statistics.notes;
 
-    statNumbers[1].textContent =
+
+        stats[1].textContent =
         statistics.flashcards;
 
-    statNumbers[2].textContent =
+
+        stats[2].textContent =
         statistics.courses;
 
+    }
+
 }
+
+
 
 loadStatistics();
 
-
-// =====================================
-// Recommended Universities
-// =====================================
-
-const recommendedUniversities=[
-
-{
-title:"Massachusetts Institute of Technology",
-country:"United States"
-},
-
-{
-title:"Harvard University",
-country:"United States"
-},
-
-{
-title:"University of Oxford",
-country:"United Kingdom"
-},
-
-{
-title:"National University of Singapore",
-country:"Singapore"
-}
-
-];
-
-
-// =====================================
-// Planner
-// =====================================
-
-const planner=[
-
-{
-
-time:"09:00",
-
-title:"Study Mathematics"
-
-},
-
-{
-
-time:"13:30",
-
-title:"AI Course"
-
-},
-
-{
-
-time:"19:00",
-
-title:"Review Flashcards"
-
-}
-
-];
-
-
-// =====================================
-// Recent Notes
-// =====================================
-
-const recentNotes=[
-
-{
-
-title:"Biology Chapter 5",
-
-date:"Today"
-
-},
-
-{
-
-title:"Physics Formula",
-
-date:"Yesterday"
-
-},
-
-{
-
-title:"Programming JavaScript",
-
-date:"2 days ago"
-
-}
-
-];
 
 
 // =====================================
@@ -453,96 +388,61 @@ date:"2 days ago"
 
 const learning={
 
-course:
+    course:
+    "Introduction to Artificial Intelligence",
 
-"Introduction to Artificial Intelligence",
-
-progress:65
+    progress:65
 
 };
 
 
-// =====================================
-// Update Continue Learning
-// =====================================
 
 function updateLearning(){
 
-    const title=document.querySelector(
-".course-info h3"
-);
+    const title =
+    document.querySelector(
+    ".course-info h3"
+    );
 
-    const text=document.querySelector(
-".course-info p"
-);
 
-    const bar=document.querySelector(
-".progress-bar"
-);
+    const text =
+    document.querySelector(
+    ".course-info p"
+    );
+
+
+    const bar =
+    document.querySelector(
+    ".progress-bar"
+    );
+
+
 
     if(title)
-        title.textContent=
+        title.textContent =
         learning.course;
 
+
     if(text)
-        text.textContent=
+        text.textContent =
         `Progress : ${learning.progress}%`;
 
+
     if(bar)
-        bar.style.width=
+        bar.style.width =
         learning.progress+"%";
 
 }
 
+
 updateLearning();
 
 
-// =====================================
-// Today's Planner Highlight
-// =====================================
-
-function highlightPlanner(){
-
-    const items=document
-    .querySelectorAll(".planner-item");
-
-    if(items.length===0) return;
-
-    items[0].style.background=
-        "#eff6ff";
-
-    items[0].style.borderRadius=
-        "12px";
-
-    items[0].style.padding=
-        "12px";
-
-}
-
-highlightPlanner();
-
 
 // =====================================
-// Dashboard Refresh
-// =====================================
-
-function refreshDashboard(){
-
-    loadStatistics();
-
-    updateLearning();
-
-    highlightPlanner();
-
-}
-
-refreshDashboard();
-
-
-// =====================================
-// Ready for Firestore
+// Ready
 // =====================================
 
 console.log(
-"Dashboard Ready"
+"EduPath Dashboard Ready"
 );
