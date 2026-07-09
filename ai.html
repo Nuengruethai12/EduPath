@@ -7,9 +7,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EduPath</title>
+<title>EduPath AI Mentor</title>
 
 <link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="ai.css">
 
 <link
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -17,37 +18,298 @@ rel="stylesheet">
 
 </head>
 
-
 <body>
 
 <div class="layout">
 
-<main class="main">
+<!-- ================= Sidebar ================= -->
 
-<section class="welcome-card">
+<aside class="sidebar">
 
-<h1>
-EduPath
-</h1>
+<div class="logo">
 
-<p>
-This page is under development.
-</p>
+<h2>🎓 EduPath</h2>
 
-<div class="welcome-buttons">
-
-<a href="home.html">
-← Back Dashboard
-</a>
+<p>AI Education Platform</p>
 
 </div>
 
-</section>
+<nav>
 
+<a href="home.html">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Dashboard</span>
+
+</a>
+
+<a href="learn.html">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Learn</span>
+
+</a>
+
+<a href="search.html">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<span>Discover</span>
+
+</a>
+
+<a href="note.html">
+
+<i class="fa-solid fa-note-sticky"></i>
+
+<span>My Notes</span>
+
+</a>
+
+<a href="flashcards.html">
+
+<i class="fa-solid fa-layer-group"></i>
+
+<span>Flashcards</span>
+
+</a>
+
+<a class="active" href="ai.html">
+
+<i class="fa-solid fa-robot"></i>
+
+<span>AI Mentor</span>
+
+</a>
+
+<a href="marketplace.html">
+
+<i class="fa-solid fa-store"></i>
+
+<span>Marketplace</span>
+
+</a>
+
+<a href="analytics.html">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>Analytics</span>
+
+</a>
+
+<a href="profile.html">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</a>
+
+</nav>
+
+</aside>
+
+<!-- ================= Main ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+<h1>
+
+🤖 AI Mentor
+
+</h1>
+
+<div class="top-actions">
+
+<button>
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-gear"></i>
+
+</button>
+
+<div class="avatar">
+
+<img
+src="https://i.pravatar.cc/100"
+alt="avatar">
+
+</div>
+
+</div>
+
+</header>
+
+<!-- ================= AI Layout ================= -->
+
+<section class="ai-layout">
+
+    <!-- Left : Chat History -->
+
+    <aside class="chat-sidebar">
+
+        <button class="new-chat">
+
+            <i class="fa-solid fa-plus"></i>
+
+            New Chat
+
+        </button>
+
+        <h3>Recent Chats</h3>
+
+        <div class="history-list">
+
+            <div class="history-item active">
+
+                🎓 University Recommendation
+
+            </div>
+
+            <div class="history-item">
+
+                💻 Computer Science
+
+            </div>
+
+            <div class="history-item">
+
+                📚 Biology Summary
+
+            </div>
+
+            <div class="history-item">
+
+                ✈️ Study Abroad
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- Right : Chat Area -->
+
+    <section class="chat-area">
+
+        <div class="chat-messages" id="chatMessages">
+
+            <div class="message ai">
+
+                <div class="bubble">
+
+                    <h3>👋 Welcome to EduPath AI Mentor</h3>
+
+                    <p>
+
+                        I can help you with
+
+                    </p>
+
+                    <ul>
+
+                        <li>🎓 University recommendations</li>
+
+                        <li>💼 Career guidance</li>
+
+                        <li>📚 Course planning</li>
+
+                        <li>📝 Study summaries</li>
+
+                        <li>🤖 Personalized learning advice</li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Chat Input -->
+
+        <div class="chat-input">
+
+            <input
+
+                id="promptInput"
+
+                type="text"
+
+                placeholder="Ask anything about education...">
+
+            <button id="sendBtn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</section>
 </main>
 
 </div>
 
+<!-- ================= Mobile Navigation ================= -->
+
+<nav class="mobile-nav">
+
+    <a href="home.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>Home</span>
+
+    </a>
+
+    <a href="search.html">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <span>Search</span>
+
+    </a>
+
+    <a href="learn.html">
+
+        <i class="fa-solid fa-book-open"></i>
+
+        <span>Learn</span>
+
+    </a>
+
+    <a class="active" href="ai.html">
+
+        <i class="fa-solid fa-robot"></i>
+
+        <span>AI</span>
+
+    </a>
+
+    <a href="profile.html">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>Profile</span>
+
+    </a>
+
+</nav>
+
+<script type="module" src="js/ai.js"></script>
 
 </body>
 
